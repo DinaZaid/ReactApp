@@ -115,11 +115,6 @@ class EmployeeEdit extends Component {
             <Input type="text" name="salary" id="salary" value={item.salary || ''}
                    onChange={this.handleChange}/>
           </FormGroup>
-		  <FormGroup>
-            <Label for="hireDate">Hire Date</Label>
-            <DatePicker placeholderText="Click to select a hiring date" name="hireDate" id="hireDate" value={item.hireDate || ''}
-                   onChange={this.handleChange}/>
-          </FormGroup>
           <FormGroup>
             <Button color="primary" type="submit">Save</Button>{' '}
             <Button color="secondary" tag={Link} to="/employees">Cancel</Button>

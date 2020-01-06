@@ -12,8 +12,7 @@ class Home extends Component {
         <Container fluid>
           <Button color="link"><Link to="/employees">Manage Employees</Link></Button>
           <Button color="link"><Link to="/departments">Manage Departments</Link></Button>
-
-        </Container>
+		  </Container>
       </div>
     );
   }

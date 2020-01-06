@@ -5,18 +5,40 @@ import { Link } from 'react-router-dom';
 
 class EmployeesList extends Component {
 
+
+ emptyItem = {
+    empCount : 6,
+    size: 2,
+    page: 0,
+	numOfPages : 0
+  };
+
   constructor(props) {
     super(props);
-    this.state = {employees: [], isLoading: true};
+	
+	 this.state = {
+      item: this.emptyItem
+    };
+    this.state = {employees: [], isLoading: true,empCount:0};
     this.remove = this.remove.bind(this);
   }
 
   componentDidMount() {
     this.setState({isLoading: true});
-
-    fetch('/EmployeeController/employees')
+	
+    fetch('EmployeeController/employeeCount')
+      .then(response => response.json())
+      .then(data =>   this.setState({[this.emptyItem.empCount]: data}));
+	  alert(this.emptyItem.empCount);
+	  
+	fetch('/EmployeeController/employees/'+this.emptyItem.page+'/'+this.emptyItem.size)
       .then(response => response.json())
       .then(data => this.setState({employees: data, isLoading: false}));
+	  
+	  
+	  this.emptyItem.numOfPages = eval(this.emptyItem.empCount/this.emptyItem.size);
+	  if(this.emptyItem.numOfPages*this.emptyItem.size <this.emptyItem.empCount)
+		this.emptyItem.numOfPages=this.emptyItem.numOfPages+1;  
   }
 
   async remove(id) {
@@ -32,9 +54,50 @@ class EmployeesList extends Component {
     });
   }
 
+
+async getFirstPage()
+{
+	 fetch('/EmployeeController/employees/0/'+this.emptyItem.size)
+      .then(response => response.json())
+      .then(data => this.setState({employees: data, isLoading: false}));
+	  this.emptyItem.page = 0;
+	   
+}
+
+async getNextPage()
+{
+	if(this.emptyItem.page  < this.emptyItem.numOfPages-1)		
+	{ this.emptyItem.page= this.emptyItem.page+1
+
+ fetch('/EmployeeController/employees/'+this.emptyItem.page+'/'+this.emptyItem.size)
+      .then(response => response.json())
+      .then(data => this.setState({employees: data, isLoading: false}));
+	}
+
+}
+async getPreviousPage()
+{	
+	if(this.emptyItem.page!=0 || this.emptyItem.page < 0)		
+	{this.emptyItem.page= this.emptyItem.page-1
+
+ fetch('/EmployeeController/employees/'+this.emptyItem.page+'/'+this.emptyItem.size)
+      .then(response => response.json())
+      .then(data => this.setState({employees: data, isLoading: false}));
+	}
+}
+
+async  getLastPage()
+{
+	const lastPage = eval((this.emptyItem.empCount/this.emptyItem.size)-1);
+	
+	 fetch('/EmployeeController/employees/'+lastPage+'/'+this.emptyItem.size)
+      .then(response => response.json())
+      .then(data => this.setState({employees: data, isLoading: false}));
+	  this.emptyItem.page = lastPage;
+}
+
   render() {
     const {employees, isLoading} = this.state;
-	const totalEmployees = employees.length;
 
     if (isLoading) {
       return <p>Loading...</p>;
@@ -84,6 +147,13 @@ class EmployeesList extends Component {
             {employeesList}
             </tbody>
           </Table>
+		  
+		  <div>
+		   <Button color="primary" type="submit"  value="first" onClick={() => this.getFirstPage()}>First</Button>{' '}
+            <Button color="secondary" type="submit"   value="prev"  onClick={() =>this.getPreviousPage(this.emptyItem.page-1)}>prev</Button>
+			<Button color="secondary" type="submit"  value="next"  onClick={() =>this.getNextPage(this.emptyItem.page+1)}>Next</Button>
+			<Button color="primary" type="submit" value="last"  onClick={() =>this.getLastPage(this.emptyItem.empCount)}>Last</Button>{' '}
+           </div>
         </Container>
       </div>
     );
