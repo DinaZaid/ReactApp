@@ -11,16 +11,17 @@ class DepartmentEdit extends Component {
 
   emptyItem = {
     name: '',
-    manager: '',
+    managers: [],
+	selectedManager:''
   };
 
   constructor(props) {
     super(props);
     this.state = {
       item: this.emptyItem,
-	  managers: [],
 	  isLoading: false,
 	  selectedManager: "",
+	  managerList: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -32,29 +33,23 @@ class DepartmentEdit extends Component {
 	if (this.props.match.params.id !== 'new') {
       const dep = await (await fetch(`/DepartmentController/departments/${this.props.match.params.id}`)).json();
       this.setState({item: dep});
-    }
 	  
-	const managersList = await (await fetch(`/EmployeeController/employees`)).json();
-	//alert(managersList[0].firstName);
-    this.setState({managers: managersList});
-    
+    }
+	   this.setState({managerList:await (await fetch(`/EmployeeController/allEmployees`)).json()})
+	   
+	this.emptyItem.managers =await (await fetch(`/EmployeeController/allEmployees`)).json();
+	
   }
   
   onDropdownSelected(event) {
-	    event.preventDefault();
-   const target = event.target;
-    const value = target.value;
-    const name = target.name;
-	alert("THE name", name);
-	alert("THE tarhet", target);
+	    
+	alert("onDropdownSelected", event.target);
 	
-	alert("THE VAL", value);
-	
-    
     //here you will see the current selected value of the select input
 }
 
   handleChange(event) {
+	 const valueSelected = document.getElementById('manager');
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -96,8 +91,7 @@ class DepartmentEdit extends Component {
 	const {item, managers} = this.state;
     const title = <h2>{item.id ? 'Edit Department' : 'Add Department'}</h2>;
 	
-	let list = managers.map((manager) => <option data-isd={manager.id} value={manager.id}>{manager.firstName}</option>);
-
+	
     return <div>
       <AppNavbar/>
       <Container>
@@ -105,18 +99,9 @@ class DepartmentEdit extends Component {
         <Form onSubmit={this.handleSubmit}>
           <FormGroup>
             <Label for="name">Department Name</Label>
-            <Input type="text" name="name" id="name" value={item.name || ''}
-                   onChange={this.handleChange}/>
+            <Input type="text" name="name" id="name"  onChange={this.handleChange}/>
           </FormGroup>
 		  
-		  <FormGroup>
-			<Label for="manager">Manager Name</Label>
-			<select id="manager" value={this.state.manager} onChange={this.onDropdownSelected(this.status.manager)} name="manager" label="Multiple Select">
-				<option >Select Manager</option>
-				{list}
-			</select>
-			
-		</FormGroup>
           <FormGroup>
             <Button color="primary" type="submit">Save</Button>{' '}
             <Button color="secondary" tag={Link} to="/departments">Cancel</Button>

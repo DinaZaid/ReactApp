@@ -16,9 +16,7 @@ class EmployeesList extends Component {
   constructor(props) {
     super(props);
 	
-	 this.state = {
-      item: this.emptyItem
-    };
+	
     this.state = {employees: [], isLoading: true,empCount:0};
     this.remove = this.remove.bind(this);
   }
@@ -28,8 +26,8 @@ class EmployeesList extends Component {
 	
     fetch('EmployeeController/employeeCount')
       .then(response => response.json())
-      .then(data =>   this.setState({[this.emptyItem.empCount]: data}));
-	  alert(this.emptyItem.empCount);
+      .then(data =>  this.setState({empCount: data, isLoading: false}));
+	  alert(this.state.empCount);
 	  
 	fetch('/EmployeeController/employees/'+this.emptyItem.page+'/'+this.emptyItem.size)
       .then(response => response.json())

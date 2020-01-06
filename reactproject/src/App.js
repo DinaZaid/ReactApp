@@ -9,7 +9,7 @@ import EmployeesList from './EmployeesList';
 import EmployeeEdit from './EmployeeEdit';
 import DepartmentList from './DepartmentList';
 import DepartmentEdit from './DepartmentEdit';
-import newEmp from './newEmp';
+
 
 class App extends Component {
   render() {
@@ -21,7 +21,7 @@ class App extends Component {
 		  <Route path='/employees/:id' exact={true} component={EmployeeEdit}/>
 		   <Route path='/departments' exact={true} component={DepartmentList}/>
 		   <Route path='/departments/:id' exact={true} component={DepartmentEdit}/>
-		   <Route path='/newEmp' exact={true} component={newEmp}/>
+		   
 		   
         </Switch>
       </Router>

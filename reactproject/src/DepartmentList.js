@@ -49,7 +49,6 @@ class DepartmentList extends Component {
 		
         <td>
           <ButtonGroup>
-            <Button size="sm" color="primary" tag={Link} to={"/departments/" + dep.id}>Edit</Button>
             <Button size="sm" color="danger" onClick={() => this.remove(dep.id)}>Delete</Button>
           </ButtonGroup>
         </td>
@@ -61,9 +60,9 @@ class DepartmentList extends Component {
         <AppNavbar/>
         <Container fluid>
           <div className="float-right">
-            <Button color="success" tag={Link} to="/departments/new">Add Department</Button>
+          
           </div>
-          <h3>Employees List</h3>
+          <h3>Department List</h3>
           <Table className="mt-4">
             <thead>
             <tr>
