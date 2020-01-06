@@ -27,7 +27,7 @@ class EmployeesList extends Component {
     fetch('EmployeeController/employeeCount')
       .then(response => response.json())
       .then(data =>  this.setState({empCount: data, isLoading: false}));
-	  alert(this.state.empCount);
+	  
 	  
 	fetch('/EmployeeController/employees/'+this.emptyItem.page+'/'+this.emptyItem.size)
       .then(response => response.json())
